@@ -31,12 +31,12 @@ def cpu_benchmark():
     floating point math to test cpu
     """
     for i in range(1000):
-        for x in range(1, 1000):
-            math.pi * 2 ** x
+        # for x in range(1, 1000):
+        #     math.pi * 2 ** x
         for x in range(1, 100000):
-            float(x) / 3.14592
-        for x in range(1, 10000):
-            math.pi / x
+            float(x) / math.pi
+        # for x in range(1, 10000):
+        #     math.pi / x
 
 if __name__ == '__main__':
     cpu_stats_thread = threading.Thread(target=print_cpu_utilization, name='cpu_stats_thread')
