@@ -1,18 +1,21 @@
 import psutil
-import random
 import time
 import threading
 from time_efficiency import time_efficiency_decorator
+from thread_wrapper import get_thread_by_name
+import pandas as pd
 
-random.seed(time.time())
-
-def print_cpu_and_mem_utilization():
+memory_utilization = []
+def print_mem_utilization():
     """
     start this to print cpu utilization every 5 sec
     """
     while True:
-        print(f"CPU percent: {psutil.cpu_percent(interval=5, percpu=True)}")
-        print(f"Memory Utilization: {psutil.virtual_memory()}")
+        memory_util = psutil.virtual_memory().percent
+        print(f"Memory Utilization: {memory_util}")
+        memory_utilization.append(memory_util)
+        time.sleep(5)
+
 
 @time_efficiency_decorator
 def memory_benchmark():
@@ -20,13 +23,23 @@ def memory_benchmark():
     keep adding * to a list to increase memory utilization
     """
     lst = []
-    for i in range(0, 1024*1024*1024):
+    for i in range(0, 1024*1024*256):
         lst.append('*' * 1024)
-        
-
 
 if __name__ == '__main__':
-    cpu_stats_thread = threading.Thread(target=print_cpu_and_mem_utilization, name='cpu_stats_thread')
-    cpu_stats_thread.daemon = True
-    cpu_stats_thread.start()
-    memory_benchmark()
+    results = {
+        'Trial': [],
+        'Memory Utilization': []
+    }
+    for i in range(100):
+        mem_stats_thread = threading.Thread(target=print_mem_utilization, name='mem_stats_thread')
+        mem_stats_thread.daemon = True
+        mem_stats_thread.start()
+        memory_benchmark()
+        t = get_thread_by_name('mem_stats_thread')
+        mem_util_string = ', '.join(str(o) for o in memory_utilization)
+        results['Trial'].append(i+1)
+        results['Memory Utilization'].append(mem_util_string)
+        t.do_run = False
+    results_df = pd.DataFrame.from_dict(results)
+    results_df.to_csv('cpu_test_results.csv', index=False)
