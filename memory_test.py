@@ -29,16 +29,18 @@ def memory_benchmark():
 if __name__ == '__main__':
     results = {
         'Trial': [],
+        'Time Taken': [],
         'Memory Utilization': []
     }
     for i in range(100):
         mem_stats_thread = threading.Thread(target=print_mem_utilization, name='mem_stats_thread')
         mem_stats_thread.daemon = True
         mem_stats_thread.start()
-        memory_benchmark()
+        time_taken = memory_benchmark()
         t = get_thread_by_name('mem_stats_thread')
         mem_util_string = ', '.join(str(o) for o in memory_utilization)
         results['Trial'].append(i+1)
+        results['Time Taken'].append(time_taken)
         results['Memory Utilization'].append(mem_util_string)
         t.do_run = False
     results_df = pd.DataFrame.from_dict(results)
