@@ -23,7 +23,7 @@ def memory_benchmark():
     keep adding * to a list to increase memory utilization
     """
     lst = []
-    for i in range(0, 1024*1024*256):
+    for i in range(0, 1024*1024):
         lst.append('*' * 1024)
 
 if __name__ == '__main__':
