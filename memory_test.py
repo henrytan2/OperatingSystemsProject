@@ -23,7 +23,7 @@ def memory_benchmark():
     keep adding * to a list to increase memory utilization
     """
     bytearr = bytearray()
-    for i in range(0, 1024*1024*128):
+    for i in range(0, 1024*1024*512):
         bytearr.append(5)
 
 if __name__ == '__main__':
