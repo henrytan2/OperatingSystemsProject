@@ -31,19 +31,19 @@ if __name__ == '__main__':
     results = {
         'Trial': [],
         'Time Taken': [],
-        'Disk Utilization': []
+        'Disk Write Times': []
     }
     for i in range(100):
         disk_stats_thread = threading.Thread(target=print_disk_utilization, name='disk_stats_thread')
         disk_stats_thread.daemon = True
         disk_stats_thread.start()
         t = get_thread_by_name('disk_stats_thread')
-        time_taken = write_test('disk_test.txt', 104857600, 50)
+        time_taken = write_test('disk_test.txt', 104857600, 25)
         disk_util_string = ', '.join(str(o) for o in disk_write_times)
         os.remove('disk_test.txt')
         results['Trial'].append(i+1)
         results['Time Taken'].append(time_taken)
-        results['Disk Utilization'].append(disk_util_string)
+        results['Disk Write Times'].append(disk_util_string)
         disk_write_times.clear()
         t.do_run = False
     results_df = pd.DataFrame.from_dict(results)
