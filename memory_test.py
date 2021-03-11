@@ -40,5 +40,6 @@ if __name__ == '__main__':
         results['Trial'].append(i+1)
         results['Time Taken'].append(time_taken)
         results['Memory Utilization'].append(mem_util_string)
+        memory_utilization.clear()
     results_df = pd.DataFrame.from_dict(results)
     results_df.to_csv('mem_test_results.csv', index=False)
