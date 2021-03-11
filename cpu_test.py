@@ -3,7 +3,6 @@ import threading
 import math
 import time
 from time_efficiency import time_efficiency_decorator
-from thread_wrapper import get_thread_by_name
 import pandas as pd
 
 cpu_utilization = []
@@ -37,18 +36,16 @@ if __name__ == '__main__':
         'Time Taken': [], 
         'CPU Utilization': []
     }
+    cpu_stats_thread = threading.Thread(target=print_cpu_utilization, name='cpu_stats_thread')
+    cpu_stats_thread.daemon = True
+    cpu_stats_thread.start()
     for i in range(100):
-        cpu_stats_thread = threading.Thread(target=print_cpu_utilization, name='cpu_stats_thread')
-        cpu_stats_thread.daemon = True
-        cpu_stats_thread.start()
         time_taken = cpu_benchmark()
-        t = get_thread_by_name('cpu_stats_thread')
         results['Trial'].append(i + 1)
         results['Time Taken'].append(time_taken)
         cpu_util_string = ', '.join(str(o) for o in cpu_utilization)
         results['CPU Utilization'].append(cpu_util_string)
         cpu_utilization.clear()
-        t.do_run = False
     results_df = pd.DataFrame.from_dict(results)
     results_df.to_csv('cpu_test_results.csv', index=False)
 
