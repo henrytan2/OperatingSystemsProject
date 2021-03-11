@@ -44,4 +44,4 @@ if __name__ == '__main__':
         results['Memory Utilization'].append(mem_util_string)
         t.do_run = False
     results_df = pd.DataFrame.from_dict(results)
-    results_df.to_csv('cpu_test_results.csv', index=False)
+    results_df.to_csv('mem_test_results.csv', index=False)
