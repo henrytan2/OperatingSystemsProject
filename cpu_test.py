@@ -23,10 +23,10 @@ def cpu_benchmark():
     floating point math to test cpu
     """
     for i in range(1000):
-        for x in range(1, 1000):
-            math.pi * 2 ** x
-        # for x in range(1, 100000):
-        #     float(x) / math.pi
+        # for x in range(1, 1000):
+        #     math.pi * 2 ** x
+        for x in range(1, 100000):
+            float(x) / math.pi
         # for x in range(1, 10000):
         #     math.pi / x
 
