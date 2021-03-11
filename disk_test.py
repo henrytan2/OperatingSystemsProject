@@ -36,8 +36,10 @@ if __name__ == '__main__':
     disk_stats_thread.daemon = True
     disk_stats_thread.start()
     for i in range(100):
-        time_taken = write_test('disk_test.txt', 104857600, 20)
+        time_taken = write_test('disk_test.txt', 104857600, 10)
         disk_util_string = ', '.join(str(o) for o in disk_write_times)
+        f = open('disk_test.txt', 'r+')
+        f.truncate(0)
         os.remove('disk_test.txt')
         results['Trial'].append(i+1)
         results['Time Taken'].append(time_taken)
