@@ -11,7 +11,7 @@ def print_mem_utilization():
     """
     while True:
         memory_util = psutil.virtual_memory().percent
-        print(f"Memory Utilization: {memory_util}")
+        print("Memory Utilization: {0}".format(memory_util))
         memory_utilization.append(memory_util)
         time.sleep(5)
 

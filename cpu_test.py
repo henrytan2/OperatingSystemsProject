@@ -12,7 +12,7 @@ def print_cpu_utilization():
     """
     while True:
         cpu_util = psutil.cpu_percent()
-        print(f"CPU percent: {cpu_util}")
+        print("CPU percent: {0}".format(cpu_util))
         cpu_utilization.append(cpu_util)
         time.sleep(5)
 
