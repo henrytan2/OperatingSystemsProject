@@ -46,5 +46,5 @@ if __name__ == '__main__':
         results['Disk Write Times'].append(disk_util_string)
         disk_write_times.clear()
     results_df = pd.DataFrame.from_dict(results)
-    results_df.to_csv('cpu_test_results.csv', index=False)
+    results_df.to_csv('disk_test_results.csv', index=False)
         
