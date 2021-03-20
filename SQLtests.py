@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[22]:
 
 
 #got this from henry
@@ -23,7 +23,7 @@ def time_efficiency_decorator(func):
     return wrapper
 
 
-# In[2]:
+# In[23]:
 
 
 #import libraries
@@ -32,7 +32,7 @@ from mysql.connector import Error
 import pandas as pd
 
 
-# In[4]:
+# In[26]:
 
 
 #establish connection
@@ -52,13 +52,13 @@ def create_server_connection(host_name, user_name, user_password):
     return connection
 
 
-# In[5]:
+# In[27]:
 
 
 #how do I actually establish the epassword
 pw = "password"
 #test connection
-connection = create_server_connection("localhost", "root", pw)
+connection = create_server_connection("localhost", "admin", pw)
 
 
 # In[ ]:
@@ -84,7 +84,7 @@ table2size = 100000
 #what kinda query?
 #...shit, doesn't use select
 @time_efficiency_decorator
-def execute_query(connection, query):
+def execute_query(query):
     #change connecction to global variable, not argument
     cursor = connection.cursor()
     try:
@@ -104,8 +104,7 @@ def select(tableName, value1, value2):
     try:
         val = "SELECT col1, col2 FROM tableName"
         #call execute and pass val
-        #change connecction to global variable
-        execute_query(connection, val)
+        execute_query(val)
         print("successful select query\n")
     except:
         print("Error with select query\n")
@@ -115,13 +114,17 @@ def select(tableName, value1, value2):
 
 
 @time_efficiency_decorator
-def insert(tableName, value1, value2):
+def insert(value1, value2):
     #I know I'm gonna have to change the tableName variable and use our actual tableName in all caps
     #or will i?
     try:
-        INSERT INTO tableName
-        VALUES (value1, value2)
+        #assume table name is table
+        #do these need to be seperated by a line to work?
+        query = "INSERT INTO table\n VALUES )" + str(value1) + ", " + str(value2) + ")"
+        #INSERT INTO tableName
+        #VALUES (value1, value2)
         #add execute query
+        execute_query(query)
         print("Inserted successfully\n")
     except:
         print("Error inserting into table\n")
@@ -135,10 +138,13 @@ def insert(tableName, value1, value2):
 @time_efficiency_decorator
 def update(tableName, value1, value2, col1, col2, target):
     try:
-        UPDATE tableName
-        SET col1 = value1, col2 = value2
-        WHERE col1 = target
+        #assume table name is table
+        #UPDATE tableName
+        #SET col1 = value1, col2 = value2
+        #WHERE col1 = target
+        query = "UPDATE table\nSET " + str(col1) + "=" + str(value1) + ", " + str(col2) + "=" + str(value2) "\nWHERE " + str(col1) + "=" + str(target)
         #add execute query 
+        execute_query(query)
         print("Updated successfully\n")
     except:
         print("Error updating table\n")
@@ -151,13 +157,20 @@ def update(tableName, value1, value2, col1, col2, target):
 @time_efficiency_decorator
 def delete(tableName, col1, target):
     try:
-        DELETE FROM tableName WHERE col1 = target 
+        #DELETE FROM tableName WHERE col1 = target 
+        query = "DELETE FROM table WHERE " + str(col1) + "=" + str(target)
+        execute_query(query)
         print("Successfully deleted\n")
     except:
         print("Error deleting from table\n")
 
 
 # In[ ]:
+
+
+
+
+
 
 
 
