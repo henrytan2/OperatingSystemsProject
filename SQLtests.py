@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[22]:
+# In[1]:
 
 
 #got this from henry
@@ -23,7 +23,7 @@ def time_efficiency_decorator(func):
     return wrapper
 
 
-# In[23]:
+# In[2]:
 
 
 #import libraries
@@ -32,7 +32,7 @@ from mysql.connector import Error
 import pandas as pd
 
 
-# In[26]:
+# In[3]:
 
 
 #establish connection
@@ -43,7 +43,8 @@ def create_server_connection(host_name, user_name, user_password):
         connection = mysql.connector.connect(
             host=host_name,
             user=user_name,
-            passwd=user_password
+            passwd=user_password,
+            database="1k_table"
         )
         print("MySQL Database connection successful")
     except Error as err:
@@ -52,38 +53,22 @@ def create_server_connection(host_name, user_name, user_password):
     return connection
 
 
-# In[27]:
+# In[4]:
 
 
 #how do I actually establish the epassword
 pw = "password"
 #test connection
-connection = create_server_connection("localhost", "admin", pw)
+connection = create_server_connection("34.125.121.2", "admin", pw)
 
 
-# In[ ]:
-
-
-#we will do one table of 1k entries and one table of 100k entries
-table1size = 1000
-table2size = 100000
-#Must test the following:
-#INSERT
-#UPDATE
-#DELETE
-#query with SELECT
-
-#measure time using time decorator
-#....how to measure consistency?
-
-
-# In[ ]:
+# In[5]:
 
 
 #pass queries to cursor execute
 #what kinda query?
 #...shit, doesn't use select
-@time_efficiency_decorator
+#@time_efficiency_decorator
 def execute_query(query):
     #change connecction to global variable, not argument
     cursor = connection.cursor()
@@ -95,54 +80,91 @@ def execute_query(query):
         print(f"Error: '{err}'")
 
 
-# In[ ]:
+# In[6]:
 
 
 #this one uses select but exactly how much data do we want to select? 
 @time_efficiency_decorator
-def select(tableName, value1, value2):
+def select(tableSize):
     try:
-        val = "SELECT col1, col2 FROM tableName"
+        query = ""
+        if(tableSize)==1000:
+            query = "SELECT key, val from 1k_table"
+        if(tableSize)==100000:
+            query = "SELECT key, val from 100k_table"
+        #val = "SELECT col1, col2 FROM tableName"
         #call execute and pass val
-        execute_query(val)
-        print("successful select query\n")
-    except:
-        print("Error with select query\n")
+        execute_query(query)
+        print("Successful select query\n")
+    except Error as err:
+        print(f"Error: '{err}'")
 
 
-# In[ ]:
+# In[7]:
 
 
 @time_efficiency_decorator
-def insert(value1, value2):
+def insert(tableSize, value1, value2):
     #I know I'm gonna have to change the tableName variable and use our actual tableName in all caps
     #or will i?
     try:
-        #assume table name is table
-        #do these need to be seperated by a line to work?
-        query = "INSERT INTO table\n VALUES )" + str(value1) + ", " + str(value2) + ")"
-        #INSERT INTO tableName
-        #VALUES (value1, value2)
+        query = ""
+        if(tableSize==1000):
+            query = "INSERT INTO 1k_table\n VALUES (" + str(value1) + ", '" + value2 + "')"
+        if(tableSize==100000):
+            query = "INSERT INTO 100k_table\n VALUES (" + str(value1) + ", '" + value2 + "')"
         #add execute query
         execute_query(query)
         print("Inserted successfully\n")
-    except:
-        print("Error inserting into table\n")
+    except Error as err:
+        print(f"Error: '{err}'")
         
 
 
-# In[6]:
+# In[8]:
+
+
+#insert(1000,1, "test")
+
+
+# In[9]:
+
+
+import random
+import string
+
+def randomString(chars):
+    letters = string.ascii_lowercase
+    result_str = ''.join(random.choice(letters) for i in range(chars))
+    return result_str
+
+
+# In[10]:
+
+
+@time_efficiency_decorator
+def insert_all(tableSize):
+    key = 1
+    numChar = 45 #for varchar(45) datatype
+    for entry in range(tableSize):
+        insert(tableSize, key, randomString(numChar))
+        key+=1
+        
+
+
+# In[11]:
 
 
 #https://www.w3schools.com/sql/sql_update.asp
 @time_efficiency_decorator
-def update(tableName, value1, value2, col1, col2, target):
+def update(tableSize, numChar):
     try:
-        #assume table name is table
-        #UPDATE tableName
-        #SET col1 = value1, col2 = value2
-        #WHERE col1 = target
-        query = "UPDATE table\nSET " + str(col1) + "=" + str(value1) + ", " + str(col2) + "=" + str(value2) "\nWHERE " + str(col1) + "=" + str(target)
+        query = ""
+        #creates new random string where key = random number selected in range of tablesize
+        if(tableSize==1000):
+            query = "UPDATE 1k_table\nSET val = " + randomString(numchar) + "\nWHERE key = " + str(random.randint(1,table1size+1))
+        if(tableSize==100000):
+            query = "UPDATE 100k_table\nSET val = " + randomString(numchar) + "\nWHERE key = " + str(random.randint(1,table1size+1))
         #add execute query 
         execute_query(query)
         print("Updated successfully\n")
@@ -150,25 +172,82 @@ def update(tableName, value1, value2, col1, col2, target):
         print("Error updating table\n")
 
 
-# In[7]:
+# In[12]:
 
 
 #https://www.w3schools.com/sql/sql_delete.asp
 @time_efficiency_decorator
-def delete(tableName, col1, target):
+def delete(tableSize, target):
     try:
+        query = ""
         #DELETE FROM tableName WHERE col1 = target 
-        query = "DELETE FROM table WHERE " + str(col1) + "=" + str(target)
+        if(tableSize==1000):
+            query = "DELETE FROM 1k_table WHERE key = " + str(target)
+        if(tableSize==100000):
+            query = "DELETE FROM 100k_table WHERE key = "  + str(target)
         execute_query(query)
         print("Successfully deleted\n")
     except:
         print("Error deleting from table\n")
 
 
+# In[13]:
+
+
+@time_efficiency_decorator
+def deleteAll(tableSize):
+    try:
+        query = ""
+        if(tableSize==1000):
+            query = "DELETE FROM 1k_table"
+        if(tableSize==100000):
+            query = "DELETE FROM 100k_table"
+        execute_query(query)
+        print("Cleared table successfully\n")
+    except Error as err:
+        print(f"Error: '{err}'") 
+
+
+# In[15]:
+
+
+def performTests(tableSize, numChar):
+    deleteAll(tableSize)
+    insertAllTime = insert_all(tableSize)
+    selectTime = select(tableSize)
+    #delete a random value based on key
+    keyToDelete = random.randint(1,tableSize+1) #we will reuse this value for a single insert
+    deleteTime = delete(tableSize, keyToDelete)
+    insertTime = insert(tableSize, keyToDelete, randomString(numChar))
+    updateTime = update(tableSize, numChar)
+    deleteAllTime = deleteAll(tableSize)
+
+    return insertAllTime, selectTime, deleteTime, insertTime, updateTime, deleteAllTime
+    
+
+
+# In[16]:
+
+
+import csv
+def outputToCSV(timeResults1, timeResults2):
+    with open('sql_results.csv', mode='w') as outfile:
+        writer = csv.writer(outfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        writer.writerow(['Insert All', 'Select', 'Delete', 'Insert', 'Update', 'Delete All'])
+        writer.writerow(timeResults1)
+        writer.writerow(timeResults2)
+        
+
+
 # In[ ]:
 
 
-
+table1size = 1000
+table2size = 100000
+numChar = 45
+results1 = performTests(table1size, numChar)
+results2 = performTests(table2size, numChar)
+outputToCSV(results1, results2)
 
 
 
