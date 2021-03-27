@@ -43,3 +43,4 @@ if __name__ == '__main__':
         memory_utilization.clear()
     results_df = pd.DataFrame.from_dict(results)
     results_df.to_csv('mem_test_results.csv', index=False)
+    
