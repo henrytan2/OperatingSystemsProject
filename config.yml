@@ -1,0 +1,13 @@
+--
+# Configuration file source: https://www.youtube.com/watch?v=enhJfb_6KYU&ab_channel=TechWithPat
+# Configuration for upload-test
+azure_storage_connectionstring: "DefaultEndpointsProtocol=https;AccountName=cs7100320008d12437d;AccountKey=uBPIgTF2unklmTvUm28AmfX5aU8rdHj75rSW7u13HhHFMQwbxHcKP/UJK1q+djiA1ToUgCe2Ch+QcYYlkPpqzQ==;EndpointSuffix=core.windows.net"
+downloadTest_container_name: "download-test"
+migrationTest_source_container_name: "migration-test-source"
+migrationTest_source_container_name: "migration-test-destination"
+uploadTest_container_name: "upload-test"
+source_folder_1KB: "/Users/Nicolas Wirth/OneDrive/Documents/GitHub/OperatingSystemsProject/source_folder_1KB"
+source_folder_1MB: "/Users/Nicolas Wirth/OneDrive/Documents/GitHub/OperatingSystemsProject/source_folder_1MB"
+source_folder_10MB: "/Users/Nicolas Wirth/OneDrive/Documents/GitHub/OperatingSystemsProject/source_folder_10MB"
+destination_download_folder: "/Users/Nicolas Wirth/OneDrive/Documents/GitHub/OperatingSystemsProject/destination_download_folder"
+
