@@ -7,8 +7,8 @@ import yaml
 from azure.storage.blob import ContainerClient
 
 def load_config():
-    dir_root = os.path.dirname(os.path.abspath(__file__)
-    with open(dir_root + "/config.yaml", "r") as yamlfile:
+    dir_root = os.path.dirname(os.path.abspath(__file__))
+    with open(dir_root + "/config.yml", "r") as yamlfile:
         return yaml.load(yamlfile, Loader=yaml.FullLoader)
 
 def initialize_files():
@@ -18,21 +18,21 @@ def initialize_files():
     small_file = os.path.join(small_file_path, small_file_name)
     with open(small_file, 'wb') as f:
         f.seek(1024) # One KB
-        f.write('0')
+        f.write(0)
         f.close()
     medium_file_path = config["source_folder_1MB"]
     medium_file_name = "medium_file.txt"
     medium_file = os.path.join(medium_file_path, medium_file_name)
     with open(medium_file, 'wb') as f:
         f.seek(1024 * 1024) # One MB
-        f.write('0')
+        f.write(0)
         f.close()
     large_file_path = config["source_folder_10MB"]
     large_file_name = "large_file.txt"
     large_file = os.path.join(large_file_path, large_file_name)
     with open(large_file, 'wb') as f:
         f.seek(10 * 1024 * 1024) # Ten MB
-        f.write('0')
+        f.write(0)
         f.close()
 
 def get_files(dir):
@@ -75,15 +75,15 @@ if __name__ == '__main__':
     destination_file = os.path.join(destination_file_path, destination_file_name)
     source_folders = ["source_folder_1KB", "source_folder_1MB", "source_folder_10MB"]
     for a in source_folders:
-        download-test = get_files(config[source_folder]+"/download-test")
-        upload(download-test, config["azure_storage_connectionstring"], config["download-test_container_name")   
+        download_test = get_files(config[source_folder]+"/download-test")
+        upload(download_test, config["azure_storage_connectionstring"], config["download-test_container_name"])   
     
     results = {
         'Trial': [], 
         'Time Taken': [], 
     }
     for i in range(100):
-        time_taken = download(destination_file, config["azure_storage_connectionstring"], config["download-test_container_name")
+        time_taken = download(destination_file, config["azure_storage_connectionstring"], config["download-test_container_name"])
         results['Trial'].append(i + 1)
         results['Time Taken'].append(time_taken)
     results_df = pd.DataFrame.from_dict(results)
