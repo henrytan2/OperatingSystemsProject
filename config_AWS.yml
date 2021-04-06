@@ -1,0 +1,19 @@
+---
+# Configuration for AWS storage tests
+# Access Keys + region:
+aws_access_key_id: "YOUR_ACCESS_KEY_ID"
+aws_secret_access_key: "YOUR_SECRET_ACCESS_KEY"
+region: "YOUR_PREFERRED_REGION"
+
+# Names of buckets to interact with:
+downloadTest_bucket_name: "TBD"
+migrationTest_source_bucket_name: "migration-test-source"
+migrationTest_destination_bucket_name: "migration-test-destination"
+uploadTest_bucket_name: "upload-test"
+
+# Paths for surce/destination folders (MAY NEED EDITING)
+source_folder_1KB: "/Users/Nicolas Wirth/OneDrive/Documents/GitHub/OperatingSystemsProject/source_folder_1KB"
+source_folder_1MB: "/Users/Nicolas Wirth/OneDrive/Documents/GitHub/OperatingSystemsProject/source_folder_1MB"
+source_folder_10MB: "/Users/Nicolas Wirth/OneDrive/Documents/GitHub/OperatingSystemsProject/source_folder_10MB"
+destination_download_folder: "/Users/Nicolas Wirth/OneDrive/Documents/GitHub/OperatingSystemsProject/destination_download_folder"
+
