@@ -1,5 +1,5 @@
 ---
-# Configuration for AWS storage tests
+# Configuration for Google Cloud storage tests
 # Access Keys + region:
 aws_access_key_id: "YOUR_ACCESS_KEY_ID"
 aws_secret_access_key: "YOUR_SECRET_ACCESS_KEY"
