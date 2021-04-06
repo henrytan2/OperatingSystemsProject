@@ -82,7 +82,7 @@ if __name__ == '__main__':
     for a in source_folders:
         download_test = get_files(config[a])
         upload(download_test, config["aws_access_key_id"], 
-                config["aws_secret_access_key"], config["uploadTest_bucket_name"], config["region"])   
+                config["aws_secret_access_key"], config["downloadTest_bucket_name"], config["region"])   
     
     results = {
         'Trial': [], 
@@ -90,7 +90,7 @@ if __name__ == '__main__':
     }
     for i in range(100):
         time_taken = download(destination_folder, i, config["aws_access_key_id"], 
-                config["aws_secret_access_key"], config["uploadTest_bucket_name"], config["region"])
+                config["aws_secret_access_key"], config["downloadTest_bucket_name"], config["region"])
         results['Trial'].append(i + 1)
         results['Time Taken'].append(time_taken)
     results_df = pd.DataFrame.from_dict(results)
