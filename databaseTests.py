@@ -158,7 +158,7 @@ def insert_all(tableSize):
 
 #https://www.w3schools.com/sql/sql_update.asp
 @time_efficiency_decorator
-def update(tableSize, numChar):
+def update(tableSize, numchar):
     try:
         query = ""
         #creates new random string where key = random number selected in range of tablesize
