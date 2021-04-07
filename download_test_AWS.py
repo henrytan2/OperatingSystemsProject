@@ -8,6 +8,7 @@ import logging
 import boto3
 from time_efficiency import time_efficiency_decorator
 
+s3_resource = boto3.resource("s3")
 def load_config():
     dir_root = os.path.dirname(os.path.abspath(__file__))
     with open(dir_root + "/config_AWS.yml", "r") as yamlfile:
