@@ -1,9 +1,12 @@
 ---
 # Configuration for Google Cloud storage tests
 # Access Keys + region:
-aws_access_key_id: "YOUR_ACCESS_KEY_ID"
-aws_secret_access_key: "YOUR_SECRET_ACCESS_KEY"
-region: "YOUR_PREFERRED_REGION"
+Credentials_Dict:
+    type: "service_account"
+    client_id: "CLIENT_ID"
+    client_email: "BACKUP_CLIENT_EMAIL"
+    private_key_id: "BACKUP_PRIVATE_KEY_ID"
+    private_key: "BACKUP_PRIVATE_KEY"
 
 # Names of buckets to interact with:
 downloadTest_bucket_name: "download-test"

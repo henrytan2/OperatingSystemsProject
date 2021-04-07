@@ -45,33 +45,34 @@ def get_files(dir):
 
 
 
-def upload(files, aws_access_key_id, aws_secret_access_key, bucket_name, region):
-    bucket_client = s3_resource.Bucket(bucket_name, region, aws_access_key_id, aws_secret_access_key)
+def upload(files, bucket_name, credentials_dict):
+    client = storage.Client(credentials=credentials_dict)
+    bucket_client = client.get_bucket(bucket_name)
     
-    print("Uploading files to s3...")
+    print("Uploading files to Google Cloud Storage...")
     
     for file in files:
-        boto_client = boto3.client(file.name)
+        blob_client = bucket_client.blob(file.name)
         
         with open(file.path, "rb") as data:
-            boto_client.upload_file(data, bucket_name, boto_client.name)
-            print(f'{file.name} uploaded to s3 storage')
+            blob_client.upload_file(data, bucket_name, blob_client.name)
+            print(f'{file.name} uploaded to Google Cloud Storage')
             
 
 @time_efficiency_decorator
-def download(destination, fnum, aws_access_key_id, aws_secret_access_key, bucket_name, region):
+def download(destination, fnum, bucket_name, credentials_dict):
     """
     download process to test download speed
     """
-    bucket_client = s3_resource.Bucket(bucket_name, region, aws_access_key_id, aws_secret_access_key)
+    client = storage.Client(credentials=credentials_dict)
+    bucket_client = client.get_bucket(bucket_name)
     print("Downloading files from blob storage")
     file_tag = str(fnum)+'.txt'
     
-    for file in bucket_client.objects.all():
+    for file in bucket_client.list_blobs(bucket_name):
         new_file = os.path.join(destination, file.name.replace('.txt', file_tag))
-        boto_client = boto3.client(file.name)
         with open(new_file, "wb") as f:
-            boto_client.download_fileobj(bucket_name, new_file.name, f)
+            file.download_to_filename(f.name)
     
 
 # Code initially written by Henry Tan, modified by Nicolas Wirth
