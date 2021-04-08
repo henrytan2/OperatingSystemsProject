@@ -110,7 +110,7 @@ if __name__ == '__main__':
     disk_stats_thread = threading.Thread(target=print_disk_utilization, name='disk_stats_thread')
     disk_stats_thread.daemon = True
     disk_stats_thread.start()
-    for i in range(1):
+    for i in range(100):
         time_taken = run_tests()
         results['Trial'].append(i+1)
         cpu_util_string = ', '.join(str(o) for o in cpu_utilization)

@@ -95,11 +95,19 @@ def select(tableSize):
     try:
         query = ""
         if tableSize==1000:
+<<<<<<< HEAD
+            #query = "SELECT key, val from 1k_table"
+            query = "SELECT `key`,`val` FROM 1k_table WHERE val = " + "'pmgyywpocfecutunvxpdeviimbftumqtbgxwytgcjlnof'" 
+        if tableSize==100000:
+            #query = "SELECT key, val from 100k_table"
+            query = "SELECT `key`,`val` FROM 100k_table WHERE val = " + "'vhtsqarnglrjqjxtqdkzmmhdnztqycdhrpehgympahysl'" 
+=======
             #query = "SELECT key, value from 1k_table"
             query = "SELECT * FROM 1k_table WHERE value = " + "'jnualvxwjhjbghnucucddzmdrfqfkbkgzqswvfvdbhgvo'"
         if tableSize==100000:
             #query = "SELECT key, value from 100k_table"
             query = "SELECT * FROM 100k_table WHERE value = " + "'cewvjuidssbkxnbmonpfgndirgjwwilrfqmihamggskcm'"
+>>>>>>> 6c72c5fd8c21742ca9c1f60fb9fa96ba4db856aa
         #val = "SELECT col1, col2 FROM tableName"
         #call execute and pass val
         execute_query(query)
