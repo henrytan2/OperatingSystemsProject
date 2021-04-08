@@ -71,12 +71,12 @@ def download(destination, fnum, connection_string, container_name, fname):
     for blob in blobs:
         if(blob.name == fname):
             blob_client = container_client.get_blob_client(blob)
-            new_blob = os.path.join(destination, blob.name.replace('.txt', file_tag))
+            new_blob_name = blob.name.replace('.txt', file_tag)
+            new_blob = os.path.join(destination, new_blob_name)
             with open(new_blob, "wb") as f:
                 download_stream = blob_client.download_blob()
                 f.write(download_stream.readall())
-                print()
-                print(f'{new_blob} uploaded to blob storage')
+                print(f'{new_blob_name} downloaded from blob storage')
     
 
 # Code initially written by Henry Tan, modified by Nicolas Wirth

@@ -83,7 +83,7 @@ if __name__ == '__main__':
         if n == 2:
             source_folder = "source_folder_10MB"
             file_size_string = ', 10MB'
-        for i in range(100):
+        for i in range(3):
             upload_test = get_files(config[source_folder])
             time_taken = upload(upload_test, i, config["aws_access_key_id"], 
                 config["aws_secret_access_key"], config["uploadTest_bucket_name"], config["region"], config[source_folder])
