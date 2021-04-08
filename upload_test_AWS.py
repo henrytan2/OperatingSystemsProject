@@ -46,7 +46,7 @@ def get_files(dir):
 
 
 @time_efficiency_decorator
-def upload(files, fnum, aws_access_key_id, aws_secret_access_key, bucket_name, region, folder):
+def upload(files, file_name, aws_access_key_id, aws_secret_access_key, bucket_name, region, folder):
     """
     uploading files to test upload speed
     """
@@ -54,14 +54,12 @@ def upload(files, fnum, aws_access_key_id, aws_secret_access_key, bucket_name, r
     bucket_client = s3_resource.Bucket(bucket_name)
     
     print("Uploading files to s3...")
-    file_tag = str(fnum)+'.txt'
+    # file_tag = str(fnum)+'.txt'
+    
     boto_client = boto3.client('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
     for file in files:   
-        new_file = os.path.join(folder, file.name.replace('.txt', file_tag))
-        with open(file, "rb") as f:
-            copyfile(f.name, new_file)
-            boto_client.upload_file(new_file, bucket_name, f.name)
-            print(f'{file.name} uploaded to s3 storage')
+        new_file = os.path.join(folder, file_name)
+        boto_client.upload_file(new_file, bucket_name, file_name)
             
 
 # Code initially written by Henry Tan, modified by Nicolas Wirth
@@ -73,19 +71,23 @@ if __name__ == '__main__':
         'Time Taken': [], 
         'File Size': [],
     }
+    file_name = ""
     for n in range(3):
         if n == 0:
             source_folder = "source_folder_1KB"
+            file_name = 'small_file.txt'
             file_size_string = ', 1KB'
         if n == 1:
             source_folder = "source_folder_1MB"
+            file_name = 'medium_file.txt'
             file_size_string = ', 1MB'
         if n == 2:
             source_folder = "source_folder_10MB"
+            file_name = 'large_file.txt'
             file_size_string = ', 10MB'
-        for i in range(3):
+        for i in range(100):
             upload_test = get_files(config[source_folder])
-            time_taken = upload(upload_test, i, config["aws_access_key_id"], 
+            time_taken = upload(upload_test, file_name, config["aws_access_key_id"], 
                 config["aws_secret_access_key"], config["uploadTest_bucket_name"], config["region"], config[source_folder])
             results['Trial'].append(i + 1)
             results['Time Taken'].append(time_taken)

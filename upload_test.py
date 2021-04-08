@@ -55,9 +55,8 @@ def upload(files, fnum, connection_string, container_name):
     
     for file in files:
         blob_client = container_client.get_blob_client(file.name.replace('.txt', file_tag))
-        
         with open(file.path, "rb") as data:
-            blob_client.upload_blob(data)
+            blob_client.upload_blob(data, overwrite=True)
             print(f'{file.name} uploaded to blob storage')
             
 
