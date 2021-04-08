@@ -1,16 +1,15 @@
-#Blob configuration and upload code source: https://www.youtube.com/watch?v=enhJfb_6KYU&ab_channel=TechWithPat
 
 import time
 import os
 import yaml
 import pandas as pd
-from azure.storage.blob import ContainerClient
-from azure.storage.blob import BlobServiceClient
+import logging
+from google.cloud import storage
 from time_efficiency import time_efficiency_decorator
 
 def load_config():
     dir_root = os.path.dirname(os.path.abspath(__file__))
-    with open(dir_root + "/config.yml", "r") as yamlfile:
+    with open(dir_root + "/config_GoogleCloud.yml", "r") as yamlfile:
         return yaml.load(yamlfile, Loader=yaml.FullLoader)
 
 def initialize_files():
@@ -45,20 +44,23 @@ def get_files(dir):
 
 
 @time_efficiency_decorator
-def upload(files, fnum, connection_string, container_name):
+def upload(files, fnum, bucket_name, credentials_dict):
     """
     uploading files to test upload speed
     """
-    container_client = ContainerClient.from_connection_string(connection_string, container_name)
-    print("Uploading files to blob storage...")
+    #credentials = credentials_dict
+    storage_client = storage.Client.from_service_account_json('clever-coast-307819-c139eade8d46.json')
+    bucket_client = storage_client.get_bucket(bucket_name)
+    
+    print("Uploading files to s3...")
     file_tag = str(fnum)+'.txt'
     
     for file in files:
-        blob_client = container_client.get_blob_client(file.name.replace('.txt', file_tag))
+        blob_client = bucket_client.blob(file.name.replace('.txt', file_tag))
         
         with open(file.path, "rb") as data:
-            blob_client.upload_blob(data)
-            print(f'{file.name} uploaded to blob storage')
+            blob_client.upload_from_filename(file.path)
+            print(f'{file.name} uploaded to Google Cloud storage')
             
 
 # Code initially written by Henry Tan, modified by Nicolas Wirth
@@ -80,12 +82,12 @@ if __name__ == '__main__':
         if n == 2:
             source_folder = "source_folder_10MB"
             file_size_string = ', 10MB'
-        for i in range(100):
+        for i in range(3):
             upload_test = get_files(config[source_folder])
-            time_taken = upload(upload_test, i, config["azure_storage_connectionstring"], config["uploadTest_container_name"])
+            time_taken = upload(upload_test, i, config["uploadTest_bucket_name"], config["Credentials_Dict"])
             results['Trial'].append(i + 1)
             results['Time Taken'].append(time_taken)
             results['File Size'].append(file_size_string)
     results_df = pd.DataFrame.from_dict(results)
-    results_df.to_csv('upload-test_results_Azure.csv', index=False)
+    results_df.to_csv('upload-test_results_GC.csv', index=False)
     

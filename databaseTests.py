@@ -95,11 +95,19 @@ def select(tableSize):
     try:
         query = ""
         if tableSize==1000:
+<<<<<<< HEAD
             #query = "SELECT key, val from 1k_table"
             query = "SELECT `key`,`val` FROM 1k_table WHERE val = " + "'pmgyywpocfecutunvxpdeviimbftumqtbgxwytgcjlnof'" 
         if tableSize==100000:
             #query = "SELECT key, val from 100k_table"
             query = "SELECT `key`,`val` FROM 100k_table WHERE val = " + "'vhtsqarnglrjqjxtqdkzmmhdnztqycdhrpehgympahysl'" 
+=======
+            #query = "SELECT key, value from 1k_table"
+            query = "SELECT * FROM 1k_table WHERE value = " + "'jnualvxwjhjbghnucucddzmdrfqfkbkgzqswvfvdbhgvo'"
+        if tableSize==100000:
+            #query = "SELECT key, value from 100k_table"
+            query = "SELECT * FROM 100k_table WHERE value = " + "'cewvjuidssbkxnbmonpfgndirgjwwilrfqmihamggskcm'"
+>>>>>>> 6c72c5fd8c21742ca9c1f60fb9fa96ba4db856aa
         #val = "SELECT col1, col2 FROM tableName"
         #call execute and pass val
         execute_query(query)
@@ -163,9 +171,9 @@ def update(tableSize, numchar):
         query = ""
         #creates new random string where key = random number selected in range of tablesize
         if tableSize==1000:
-            query = "UPDATE 1k_table\nSET `val`='" + randomString(numchar) + "'\nWHERE `key` = " + str(random.randint(1,tableSize+1)) + ";"
+            query = "UPDATE 1k_table\nSET `value`='" + randomString(numchar) + "'\nWHERE `key` = " + str(random.randint(1,tableSize+1)) + ";"
         if tableSize==100000:
-            query = "UPDATE 100k_table\nSET `val`='" + randomString(numchar) +"'\nWHERE `key` = " + str(random.randint(1,tableSize+1)) + ";"
+            query = "UPDATE 100k_table\nSET `value`='" + randomString(numchar) +"'\nWHERE `key` = " + str(random.randint(1,tableSize+1)) + ";"
         #add execute query 
         execute_query(query)
     except Error as err:

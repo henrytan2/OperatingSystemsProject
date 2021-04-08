@@ -6,6 +6,7 @@ import yaml
 import pandas as pd
 import logging
 import boto3
+from shutil import copyfile
 from time_efficiency import time_efficiency_decorator
 
 def load_config():
@@ -45,20 +46,21 @@ def get_files(dir):
 
 
 @time_efficiency_decorator
-def upload(files, fnum, aws_access_key_id, aws_secret_access_key, bucket_name, region):
+def upload(files, fnum, aws_access_key_id, aws_secret_access_key, bucket_name, region, folder):
     """
     uploading files to test upload speed
     """
-    bucket_client = s3_resource.Bucket(bucket_name, region, aws_access_key_id, aws_secret_access_key)
+    s3_resource = boto3.resource('s3')
+    bucket_client = s3_resource.Bucket(bucket_name)
     
     print("Uploading files to s3...")
     file_tag = str(fnum)+'.txt'
-    
-    for file in files:
-        boto_client = boto3.client(file.name.replace('.txt', file_tag))
-        
-        with open(file.path, "rb") as data:
-            boto_client.upload_file(data, bucket_name, boto_client.name)
+    boto_client = boto3.client('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
+    for file in files:   
+        new_file = os.path.join(folder, file.name.replace('.txt', file_tag))
+        with open(file, "rb") as f:
+            copyfile(f.name, new_file)
+            boto_client.upload_file(new_file, bucket_name, f.name)
             print(f'{file.name} uploaded to s3 storage')
             
 
@@ -81,13 +83,13 @@ if __name__ == '__main__':
         if n == 2:
             source_folder = "source_folder_10MB"
             file_size_string = ', 10MB'
-        for i in range(100):
+        for i in range(3):
             upload_test = get_files(config[source_folder])
             time_taken = upload(upload_test, i, config["aws_access_key_id"], 
-                config["aws_secret_access_key"], config["uploadTest_bucket_name"], config["region"])
+                config["aws_secret_access_key"], config["uploadTest_bucket_name"], config["region"], config[source_folder])
             results['Trial'].append(i + 1)
             results['Time Taken'].append(time_taken)
             results['File Size'].append(file_size_string)
     results_df = pd.DataFrame.from_dict(results)
-    results_df.to_csv('upload-test_results.csv', index=False)
+    results_df.to_csv('upload-test_results_AWS.csv', index=False)
     

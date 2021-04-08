@@ -1,15 +1,23 @@
 ---
 # Configuration for Google Cloud storage tests
 # Access Keys + region:
-aws_access_key_id: "YOUR_ACCESS_KEY_ID"
-aws_secret_access_key: "YOUR_SECRET_ACCESS_KEY"
-region: "YOUR_PREFERRED_REGION"
-
+Credentials_Dict:
+    type: "service_account"
+    client_id: "103620819782803736727"
+    client_email: "395645256631-compute@developer.gserviceaccount.com"
+    private_key_id: "c139eade8d461433503c886510cc5ea7c9d7c8a1"
+    private_key: "nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDjxKWmD6wPOMzo\nTOpnADAOfJWnirwwYW4ryEsO7GrXQlR94YtExsA4y2ILr1JP3i84tA4316mgMkAp\nZRnRb+eVXnOQKrW7+wHdsQhZu+diUGJCFuy5LH/tvjk2jTr8miaV2cjLYJmpKuSf\nL9ot+EHRVp99tKm38Wx7uVxn77pusvyUEZexp2WcmwfHKyWPtikpiBbMB24Z5cx0\nJHEQOU42N0b+i/gpkD9K36hEwz9nt+th5mGroP5WrIL9EZW1gsU+E2OhHX+rKjhW\n647UP1yRDOefFRtGHZ1qD+Ihvai4oeZ7rTdx1s+0JN92e0/uBm6p397b3NS27CS4\nPWuQzt09AgMBAAECggEAKAa9yYIFjaNAty4VH0a0K0ePkSLbUXE9yCnprtSzLeL1\nMC37qHl4/EIZl84Wm/yCtedGfF/E6mcKSXv/3oNY4jH4AwTObRt+R3Q98G8KCYfw\nzIZ00VHVpXUBXunQzOVWFI1yMPNn7YehJ6xkHiH7hws++ftOvAmMM+3uJEHHtH4g\nz7aTySi4rd9JPgj+4TM3agVQfk0YGOEm90yDqreqLciNxUGQlhK4i7rgx1va9C1A\nz8mP2Is7qjnIrnZhX+QinMV18S0dSbgwDTL4FOuOcP6CWCS85cfGt9lMJFmeXqqq\n3WWTTpWdInEPd0hYxt7S9FjOikyT9NsJVchpkboVAQKBgQD/B1NYcYFl6KFkpeSD\n3ekV+Z6cXrTS03PanjLbYddNKFIKNU2GJkduZu82JANyPkImb2EvCnIVtGo6Zrkd\nE9VdU5dLy0+Dk/R4RhN37Kol1+iwMV0KL6iGy78MLq3alwVVSqm5D/FDjaCMWQCv\n5ByhO96ODqQtPVVYt2fGIiwZwQKBgQDkor2AoQdwXRYs6g5liotVRAjO7JwETZjT\nLFsDTfj6pIS2C0xRs4u1YmKNmLMf3yWum3eUhPlhCGL7ppIXAAYhArvfI7waZCFq\nre3SfUCKCzVYx0BplpCNFG9gkjg40cSLJN4LyyA2o1hWZbO0kpR5F8QJF3uCp94w\nY5O1yfTKfQKBgQCs080SqdE0O8NsDtRe3PsBrmljtPa7zRq9M+ppK9QZcNKwIlFI\nMRbFZbKEsUE4oaJ4o5BrrZuExAAdVdHrN66nkWd9sOlQ1Oqeu3akFdl0ze3dwYY4\nyfVebCMrYVLmSOQPWgrM5FXvHsKHeiVyDZetWIJJKPjvw5ncBmaoKi5SwQKBgQCx\nJnNEZgCYjFexR00OWjGpSES259fe8azW+oguYEzpD24Qi2J/72jxiqCn68fmiwTs\nbGNT/VAoYdIoACEzlv4ot7CPrWWC4VCPEuKxdAD8tMCJ4CDFbzbjSREfN0w+ojHy\nSgeOBb4Y96lrj/OUlvpZdROco8g8LQtYXN9HPIriFQKBgFG99VmPVjI197BT+8Nd\n50kRqgYRwoH39dRjW2iJG0LrGVpvkstgS9IKLUUSRgB9Zq280ULPbMCp2rJo8eSo\nIgXTw/WYTc3S7j9q7XQkXyZIpnJE3OgNGjBKmkmq9AXBc+a70KWWjzjTzSnJOyMp\n2zCOH0FPnEiQBrK9ZwPZz3wL"
+    project_id: "clever-coast-307819"
+    auth_uri: "https://accounts.google.com/o/oauth2/auth"
+    token_uri: "https://oauth2.googleapis.com/token"
+    auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs"
+    client_x509_cert_url: "https://www.googleapis.com/robot/v1/metadata/x509/395645256631-compute%40developer.gserviceaccount.com"
+    
 # Names of buckets to interact with:
-downloadTest_bucket_name: "download-test"
+downloadTest_bucket_name: "download-test1234"
 migrationTest_source_bucket_name: "migration-test-source"
 migrationTest_destination_bucket_name: "migration-test-destination"
-uploadTest_bucket_name: "upload-test"
+uploadTest_bucket_name: "upload-test1234"
 
 # Paths for surce/destination folders (MAY NEED EDITING)
 source_folder_1KB: "/Users/Nicolas Wirth/OneDrive/Documents/GitHub/OperatingSystemsProject/source_folder_1KB"
