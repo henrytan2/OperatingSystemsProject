@@ -1,15 +1,9 @@
 ---
 # Configuration for AWS storage tests
 # Access Keys + region:
-<<<<<<< HEAD
-aws_access_key_id: "AKIAR34BFXLYLYSJNWKN"
-aws_secret_access_key: "4hIRGdYTJ7dqk3VNT4dfRSUs0vYcthlmum6bC591"
-region: "US East (Ohio) us-east-2"
-=======
 aws_access_key_id: "YOUR_ACCESS_KEY_ID"
 aws_secret_access_key: "YOUR_SECRET_ACCESS_KEY"
 region: "YOUR_PREFERRED_REGION"
->>>>>>> 6fda3083c3dc9b81189e9b4b71703ac9a8d33735
 
 # Names of buckets to interact with:
 downloadTest_bucket_name: "download-test"
