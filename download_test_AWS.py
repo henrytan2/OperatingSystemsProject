@@ -104,7 +104,7 @@ if __name__ == '__main__':
         if n == 2:
             file_name = "large_file.txt"
             file_size_string = ', 10MB'
-        for i in range(3):
+        for i in range(100):
             time_taken = download(destination_folder, i, config["aws_access_key_id"], 
                     config["aws_secret_access_key"], config["downloadTest_bucket_name"], file_name)
             results['Trial'].append(i + 1)
