@@ -117,5 +117,5 @@ table2size = 100000
 
 
 clearAndFill(table1size)
-clearAndFill(table2size)
+#clearAndFill(table2size)
 

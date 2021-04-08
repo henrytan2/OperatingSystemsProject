@@ -96,10 +96,10 @@ def select(tableSize):
         query = ""
         if tableSize==1000:
             #query = "SELECT key, val from 1k_table"
-            query = "SELECT `key`,`val` FROM 1k_table WHERE `key` = " + str(random.randint(1,tableSize+1)) 
+            query = "SELECT `key`,`val` FROM 1k_table WHERE val = " + "'pmgyywpocfecutunvxpdeviimbftumqtbgxwytgcjlnof'" 
         if tableSize==100000:
             #query = "SELECT key, val from 100k_table"
-            query = "SELECT `key`,`val` FROM 100k_table WHERE `key` = " + str(random.randint(1,tableSize+1)) 
+            query = "SELECT `key`,`val` FROM 100k_table WHERE val = " + "'vhtsqarnglrjqjxtqdkzmmhdnztqycdhrpehgympahysl'" 
         #val = "SELECT col1, col2 FROM tableName"
         #call execute and pass val
         execute_query(query)
