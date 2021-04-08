@@ -1,8 +1,8 @@
 ---
 # Configuration for AWS storage tests
 # Access Keys + region:
-aws_access_key_id: "AKIAR34BFXLYJRTBNPFP"
-aws_secret_access_key: "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"
+aws_access_key_id: "AKIAR34BFXLYLYSJNWKN"
+aws_secret_access_key: "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"
 region: "US East (Ohio) us-east-2"
 
 # Names of buckets to interact with:

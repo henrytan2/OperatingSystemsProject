@@ -46,33 +46,36 @@ def get_files(dir):
 
 
 
-def upload(files, aws_access_key_id, aws_secret_access_key, bucket_name, region):
-    bucket_client = s3_resource.Bucket(bucket_name, region, aws_access_key_id, aws_secret_access_key)
+def upload(files, aws_access_key_id, aws_secret_access_key, bucket_name):
+    #bucket_client = s3_resource.Bucket(bucket_name, aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
     
     print("Uploading files to s3...")
-    
+    boto_client = boto3.client('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
     for file in files:
-        boto_client = boto3.client(file.name)
-        
-        with open(file.path, "rb") as data:
-            boto_client.upload_file(data, bucket_name, boto_client.name)
+        new_file = file.path
+        with open(file, "rb") as data:
+            boto_client.upload_file(new_file, bucket_name, file.name)
             print(f'{file.name} uploaded to s3 storage')
+            print()
             
 
 @time_efficiency_decorator
-def download(destination, fnum, aws_access_key_id, aws_secret_access_key, bucket_name, region):
+def download(destination, fnum, aws_access_key_id, aws_secret_access_key, bucket_name, fname):
     """
     download process to test download speed
     """
-    bucket_client = s3_resource.Bucket(bucket_name, region, aws_access_key_id, aws_secret_access_key)
-    print("Downloading files from blob storage")
+    #bucket_client = s3_resource.Bucket(bucket_name, aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
+    print()
+    print("Downloading files from s3 storage")
     file_tag = str(fnum)+'.txt'
+    boto_client = boto3.client('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key)
     
-    for file in bucket_client.objects.all():
-        new_file = os.path.join(destination, file.name.replace('.txt', file_tag))
-        boto_client = boto3.client(file.name)
-        with open(new_file, "wb") as f:
-            boto_client.download_fileobj(bucket_name, new_file.name, f)
+    #for file in boto_client.objects.all():
+    new_file = os.path.join(destination, fname)
+        
+    #with open(file, "wb") as f:
+    boto_client.download_file(bucket_name, fname, new_file)
+    print(f'{fname} downloaded from s3 storage')
     
 
 # Code initially written by Henry Tan, modified by Nicolas Wirth
@@ -84,17 +87,29 @@ if __name__ == '__main__':
     for a in source_folders:
         download_test = get_files(config[a])
         upload(download_test, config["aws_access_key_id"], 
-                config["aws_secret_access_key"], config["downloadTest_bucket_name"], config["region"])   
+                config["aws_secret_access_key"], config["downloadTest_bucket_name"])   
     
     results = {
         'Trial': [], 
         'Time Taken': [], 
+        'File Size': [],
     }
-    for i in range(100):
-        time_taken = download(destination_folder, i, config["aws_access_key_id"], 
-                config["aws_secret_access_key"], config["downloadTest_bucket_name"], config["region"])
-        results['Trial'].append(i + 1)
-        results['Time Taken'].append(time_taken)
+    for n in range(3):
+        if n == 0:
+            file_name = "small_file.txt"
+            file_size_string = ', 1KB'
+        if n == 1:
+            file_name = "medium_file.txt"
+            file_size_string = ', 1MB'
+        if n == 2:
+            file_name = "large_file.txt"
+            file_size_string = ', 10MB'
+        for i in range(3):
+            time_taken = download(destination_folder, i, config["aws_access_key_id"], 
+                    config["aws_secret_access_key"], config["downloadTest_bucket_name"], file_name)
+            results['Trial'].append(i + 1)
+            results['Time Taken'].append(time_taken)
+            results['File Size'].append(file_size_string)
     results_df = pd.DataFrame.from_dict(results)
-    results_df.to_csv('download-test_results.csv', index=False)
+    results_df.to_csv('download-test_results_AWS.csv', index=False)
     

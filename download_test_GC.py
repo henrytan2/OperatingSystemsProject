@@ -6,6 +6,7 @@ import yaml
 import pandas as pd
 import logging
 import boto3
+from google.cloud import storage
 from time_efficiency import time_efficiency_decorator
 
 def load_config():
@@ -45,9 +46,9 @@ def get_files(dir):
 
 
 
-def upload(files, bucket_name, credentials_dict):
-    client = storage.Client(credentials=credentials_dict)
-    bucket_client = client.get_bucket(bucket_name)
+def upload(files, bucket_name):
+    storage_client = storage.Client.from_service_account_json('clever-coast-307819-c139eade8d46.json')
+    bucket_client = storage_client.get_bucket(bucket_name)
     
     print("Uploading files to Google Cloud Storage...")
     
@@ -55,24 +56,23 @@ def upload(files, bucket_name, credentials_dict):
         blob_client = bucket_client.blob(file.name)
         
         with open(file.path, "rb") as data:
-            blob_client.upload_file(data, bucket_name, blob_client.name)
+            blob_client.upload_from_filename(file.path)
             print(f'{file.name} uploaded to Google Cloud Storage')
             
 
 @time_efficiency_decorator
-def download(destination, fnum, bucket_name, credentials_dict):
+def download(destination, fnum, bucket_name, fname):
     """
     download process to test download speed
     """
-    client = storage.Client(credentials=credentials_dict)
-    bucket_client = client.get_bucket(bucket_name)
-    print("Downloading files from blob storage")
+    storage_client = storage.Client.from_service_account_json('clever-coast-307819-c139eade8d46.json')
+    bucket_client = storage_client.get_bucket(bucket_name)
+    blob = bucket_client.blob(fname)
+    print()
+    print("Downloading files from Google Cloud storage")
     file_tag = str(fnum)+'.txt'
-    
-    for file in bucket_client.list_blobs(bucket_name):
-        new_file = os.path.join(destination, file.name.replace('.txt', file_tag))
-        with open(new_file, "wb") as f:
-            file.download_to_filename(f.name)
+    new_file = os.path.join(destination, fname)
+    blob.download_to_filename(new_file)
     
 
 # Code initially written by Henry Tan, modified by Nicolas Wirth
@@ -83,18 +83,28 @@ if __name__ == '__main__':
     source_folders = ["source_folder_1KB", "source_folder_1MB", "source_folder_10MB"]
     for a in source_folders:
         download_test = get_files(config[a])
-        upload(download_test, config["aws_access_key_id"], 
-                config["aws_secret_access_key"], config["downloadTest_bucket_name"], config["region"])   
+        upload(download_test, config["downloadTest_bucket_name"])   
     
     results = {
         'Trial': [], 
         'Time Taken': [], 
+        'File Size': [],
     }
-    for i in range(100):
-        time_taken = download(destination_folder, i, config["aws_access_key_id"], 
-                config["aws_secret_access_key"], config["downloadTest_bucket_name"], config["region"])
-        results['Trial'].append(i + 1)
-        results['Time Taken'].append(time_taken)
+    for n in range(3):
+        if n == 0:
+            file_name = "small_file.txt"
+            file_size_string = ', 1KB'
+        if n == 1:
+            file_name = "medium_file.txt"
+            file_size_string = ', 1MB'
+        if n == 2:
+            file_name = "large_file.txt"
+            file_size_string = ', 10MB'
+        for i in range(3):
+            time_taken = download(destination_folder, i, config["downloadTest_bucket_name"], file_name)
+            results['Trial'].append(i + 1)
+            results['Time Taken'].append(time_taken)
+            results['File Size'].append(file_size_string)
     results_df = pd.DataFrame.from_dict(results)
-    results_df.to_csv('download-test_results.csv', index=False)
-    
+    results_df.to_csv('download-test_results_GC.csv', index=False)
+    print("Test concluded successfully")

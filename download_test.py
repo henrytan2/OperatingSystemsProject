@@ -52,26 +52,31 @@ def upload(files, connection_string, container_name):
         blob_client = container_client.get_blob_client(file.name)
         with open(file.path, "rb") as data:
             blob_client.upload_blob(data)
+            print()
             print(f'{file.name} uploaded to blob storage')
             
 
 @time_efficiency_decorator
-def download(destination, fnum, connection_string, container_name):
+def download(destination, fnum, connection_string, container_name, fname):
     """
     download process to test download speed
     """
     blob_service_client = BlobServiceClient.from_connection_string(connection_string)
     container_client = ContainerClient.from_connection_string(connection_string, container_name)
+    print()
     print("Downloading files from blob storage")
     file_tag = str(fnum)+'.txt'
     
     blobs = container_client.list_blobs()
     for blob in blobs:
-        blob_client = container_client.get_blob_client(blob)
-        new_blob = os.path.join(destination, blob.name.replace('.txt', file_tag))
-        with open(new_blob, "wb") as f:
-            download_stream = blob_client.download_blob()
-            f.write(download_stream.readall())
+        if(blob.name == fname):
+            blob_client = container_client.get_blob_client(blob)
+            new_blob = os.path.join(destination, blob.name.replace('.txt', file_tag))
+            with open(new_blob, "wb") as f:
+                download_stream = blob_client.download_blob()
+                f.write(download_stream.readall())
+                print()
+                print(f'{new_blob} uploaded to blob storage')
     
 
 # Code initially written by Henry Tan, modified by Nicolas Wirth
@@ -87,11 +92,24 @@ if __name__ == '__main__':
     results = {
         'Trial': [], 
         'Time Taken': [], 
+        'File Size': [],
     }
-    for i in range(100):
-        time_taken = download(destination_folder, i, config["azure_storage_connectionstring"], config["downloadTest_container_name"])
-        results['Trial'].append(i + 1)
-        results['Time Taken'].append(time_taken)
+    for n in range(3):
+        if n == 0:
+            file_name = "small_file.txt"
+            file_size_string = ', 1KB'
+        if n == 1:
+            file_name = "medium_file.txt"
+            file_size_string = ', 1MB'
+        if n == 2:
+            file_name = "large_file.txt"
+            file_size_string = ', 10MB'
+        for i in range(100):
+            time_taken = download(destination_folder, i, 
+            config["azure_storage_connectionstring"], config["downloadTest_container_name"], file_name)
+            results['Trial'].append(i + 1)
+            results['Time Taken'].append(time_taken)
+            results['File Size'].append(file_size_string)
     results_df = pd.DataFrame.from_dict(results)
-    results_df.to_csv('download-test_results.csv', index=False)
+    results_df.to_csv('download-test_results_Azure.csv', index=False)
     

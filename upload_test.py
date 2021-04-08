@@ -87,5 +87,5 @@ if __name__ == '__main__':
             results['Time Taken'].append(time_taken)
             results['File Size'].append(file_size_string)
     results_df = pd.DataFrame.from_dict(results)
-    results_df.to_csv('upload-test_results.csv', index=False)
+    results_df.to_csv('upload-test_results_Azure.csv', index=False)
     

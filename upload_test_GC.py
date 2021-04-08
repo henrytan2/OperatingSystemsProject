@@ -49,8 +49,8 @@ def upload(files, fnum, bucket_name, credentials_dict):
     uploading files to test upload speed
     """
     #credentials = credentials_dict
-    client = storage.Client(credentials=credentials_dict)
-    bucket_client = client.get_bucket(bucket_name)
+    storage_client = storage.Client.from_service_account_json('clever-coast-307819-c139eade8d46.json')
+    bucket_client = storage_client.get_bucket(bucket_name)
     
     print("Uploading files to s3...")
     file_tag = str(fnum)+'.txt'
@@ -59,7 +59,7 @@ def upload(files, fnum, bucket_name, credentials_dict):
         blob_client = bucket_client.blob(file.name.replace('.txt', file_tag))
         
         with open(file.path, "rb") as data:
-            blob_client.upload_from_filename(data)
+            blob_client.upload_from_filename(file.path)
             print(f'{file.name} uploaded to Google Cloud storage')
             
 
@@ -82,12 +82,12 @@ if __name__ == '__main__':
         if n == 2:
             source_folder = "source_folder_10MB"
             file_size_string = ', 10MB'
-        for i in range(100):
+        for i in range(3):
             upload_test = get_files(config[source_folder])
             time_taken = upload(upload_test, i, config["uploadTest_bucket_name"], config["Credentials_Dict"])
             results['Trial'].append(i + 1)
             results['Time Taken'].append(time_taken)
             results['File Size'].append(file_size_string)
     results_df = pd.DataFrame.from_dict(results)
-    results_df.to_csv('upload-test_results.csv', index=False)
+    results_df.to_csv('upload-test_results_GC.csv', index=False)
     
