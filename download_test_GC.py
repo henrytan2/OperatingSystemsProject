@@ -90,7 +90,7 @@ if __name__ == '__main__':
         'Time Taken': [], 
         'File Size': [],
     }
-    for n in range(3):
+    for n in range(100):
         if n == 0:
             file_name = "small_file.txt"
             file_size_string = ', 1KB'
